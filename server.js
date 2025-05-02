@@ -5,7 +5,7 @@ const PORT = process.env.PORT || 3000; // Usa a porta do Render ou 3000 localmen
 // No seu `server.js` (Render)
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET');
+  res.header('Access-Control-Allow-Methods', 'GET, DELETE'); // Adiciona DELETE
   next();
 });
 app.use(express.json());
@@ -36,6 +36,20 @@ app.get('/proxy', async (req, res) => {
     console.error('Erro no proxy:', error);
     res.status(500).send('Erro ao buscar dados');
   }
+});
+
+// Nova rota para deletar produtos_historico
+app.delete('/produtos_historico', (req, res) => {
+  const { empresa, data } = req.query;
+
+  if (!empresa || !data) {
+    return res.status(400).send('Parâmetros "empresa" e "data" são obrigatórios.');
+  }
+
+  console.log(`Recebida requisição DELETE para /produtos_historico`);
+  console.log(`Empresa: ${empresa}, Data: ${data}`);
+  // TODO: Adicionar aqui a lógica para deletar o histórico do banco de dados
+  res.status(200).send(`Histórico para ${empresa} na data ${data} marcado para exclusão (lógica não implementada).`);
 });
 
 // Inicia o servidor HTTP (Render cuida do HTTPS automaticamente)
