@@ -4,8 +4,17 @@ const app = express();
 const PORT = process.env.PORT || 3000; // Usa a porta do Render ou 3000 localmente
 // No seu `server.js` (Render)
 app.use((req, res, next) => {
+  // Permite qualquer origem (ajuste se precisar ser mais restritivo)
   res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, DELETE'); // Adiciona DELETE
+  // Métodos permitidos
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  // Cabeçalhos permitidos
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization'); // Adiciona cabeçalhos comuns
+
+  // Se for uma requisição OPTIONS (preflight), responda imediatamente com 200 OK
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
   next();
 });
 app.use(express.json());
